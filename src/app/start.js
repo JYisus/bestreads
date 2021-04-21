@@ -1,5 +1,5 @@
 import BestReadsBackendApp from './BestReadsBackendApp.js';
-import RepositoryBuilder from '../../src/Shared/infrastructure/persistence/RepositoryBuilder.js';
+import RepositoryBuilder from '../Shared/persistence/RepositoryBuilder.js';
 const port = process.env.PORT || 3000;
 const runService = async () => {
   const repository = await RepositoryBuilder.build('memory', '');

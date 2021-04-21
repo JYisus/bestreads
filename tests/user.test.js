@@ -1,8 +1,8 @@
 import request from 'supertest';
-import BestReadsBackendApp from '../apps/bestreads/BestReadsBackendApp.js';
-import User from '../src/bestreads/Users/domain/User.js';
-import UserRepositoryBuilder from '../src/bestreads/Users/infrastructure/persistence/UserRepositoryBuilder.js';
-import RepositoryBuilder from '../src/Shared/infrastructure/persistence/RepositoryBuilder.js';
+import BestReadsBackendApp from '../src/app/BestReadsBackendApp.js';
+import User from '../src/contexts/Users/domain/User.js';
+import UserRepositoryBuilder from '../src/contexts/Users/infrastructure/persistence/UserRepositoryBuilder.js';
+import RepositoryBuilder from '../src/Shared/persistence/RepositoryBuilder.js';
 // import MemoryUserRepository from '../src/infrastructure/repositories/memory.js';
 
 describe('Users management', () => {
@@ -46,8 +46,5 @@ describe('Users management', () => {
       
       expect(response.body).toEqual(expect.objectContaining({ message: 'user with email test@bestreads.com already exists'}))
     });
-  })
-
- 
-})
-
+  });
+});

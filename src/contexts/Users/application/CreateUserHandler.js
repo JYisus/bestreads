@@ -1,6 +1,6 @@
 import User from "../domain/User.js";
 
-export default class UserCreator {
+export default class CreateUserHandler {
   #repository;
 
   constructor(repository) {

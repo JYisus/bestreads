@@ -1,6 +1,6 @@
 import request from 'supertest';
-import BestReadsBackendApp from '../apps/bestreads/BestReadsBackendApp.js';
-import RepositoryBuilder from '../src/Shared/infrastructure/persistence/RepositoryBuilder.js';
+import BestReadsBackendApp from '../src/app/BestReadsBackendApp.js';
+import RepositoryBuilder from '../src/Shared/persistence/RepositoryBuilder.js';
 // import MemoryUserRepository from '../src/infrastructure/repositories/memory.js';
 
 describe('Server status', () => {

@@ -1,5 +1,5 @@
 import Pool from 'pg-pool';
-import config from '../../../../../src/bestreads/Shared/infrastructure/config/index.js';
+import config from '../../../contexts/Shared/infrastructure/config/index.js';
 export class MemoryRepository {
   #db;
   #client;
