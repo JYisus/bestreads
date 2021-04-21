@@ -1,0 +1,10 @@
+{
+    "collectCoverage": false,
+    "moduleFileExtensions": [
+        "js"
+    ],
+    "testEnvironment": "jest-environment-node",
+    "testRegex": "((\\.|/*.)(test))\\.js?$",
+    "globalSetup": "./node_modules/@databases/pg-test/jest/globalSetup.js",
+    "globalTeardown": "./node_modules/@databases/pg-test/jest/globalTeardown.js"
+}
