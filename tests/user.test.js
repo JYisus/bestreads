@@ -3,8 +3,9 @@ import BestReadsBackendApp from '../src/app/BestReadsBackendApp.js';
 import User from '../src/contexts/Users/domain/User.js';
 import UserRepositoryBuilder from '../src/contexts/Users/infrastructure/persistence/UserRepositoryBuilder.js';
 import RepositoryBuilder from '../src/Shared/persistence/RepositoryBuilder.js';
+import LoggerBuilder from '../src/Shared/logger/LoggerBuilder.js';
 // import MemoryUserRepository from '../src/infrastructure/repositories/memory.js';
-
+const logger = LoggerBuilder.build();
 describe('Users management', () => {
   let app;
   let repository;
@@ -13,7 +14,7 @@ describe('Users management', () => {
   beforeEach(async () => {
     repository = await RepositoryBuilder.build('memory', '');
     userRepository = UserRepositoryBuilder.build(repository);
-    app = new BestReadsBackendApp(0, repository);
+    app = new BestReadsBackendApp(0, repository, logger);
     await app.start();
   })
 

@@ -5,15 +5,17 @@ export default class BestReadsBackendApp {
   #server;
   #repository;
   #port;
+  logger;
 
-  constructor(port, repository) {
+  constructor(port, repository, logger) {
     this.#port = port;
     this.#repository = repository;
+    this.logger = logger;
   }
 
   async start() {
     const port = this.#port;
-    this.#server = new Server(port, controllers, this.#repository);
+    this.#server = new Server(port, controllers, this.#repository, this.logger);
     return this.#server.listen();
   }
 

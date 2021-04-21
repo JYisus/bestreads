@@ -5,7 +5,7 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "start": "NODE_ENV=dev nodemon ./apps/bestreads/start.js",
+    "start": "NODE_ENV=dev nodemon ./src/app/start.js",
     "test": "NODE_ENV=test node --experimental-vm-modules ./node_modules/jest/bin/jest.js ./tests"
   },
   "keywords": [],
@@ -25,6 +25,8 @@
     "pg": "^8.6.0",
     "pg-mem": "^1.8.6",
     "pg-pool": "^3.3.0",
+    "pino": "^6.11.3",
+    "pino-pretty": "^4.7.1",
     "requirejs": "^2.3.6",
     "supertest": "^6.1.3"
   },

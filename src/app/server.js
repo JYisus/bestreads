@@ -8,9 +8,11 @@ export class Server {
   #express;
   #port;
   #httpServer;
+  logger;
 
-  constructor(port, controllers, repository) {
+  constructor(port, controllers, repository, logger) {
     this.#port = port;
+    this.logger = logger;
     this.#express = express();
     this.#express.use(bodyParser.json());
     this.#express.use(bodyParser.urlencoded({ extended: true }));
@@ -28,8 +30,8 @@ export class Server {
   async listen() {
     return new Promise((resolve) => {
       this.#httpServer = this.#express.listen(this.#port, () => {
-        console.log(`BestReads Backend App is running at http://localhost:${this.#port} int ${this.#express.get('env')} mode`)
-        console.log('Press CTRL-C to stop\n');
+        this.logger.info(`BestReads Backend App is running at http://localhost:${this.#port} int ${this.#express.get('env')} mode`)
+        this.logger.info('Press CTRL-C to stop\n');
         resolve();
       });
     });

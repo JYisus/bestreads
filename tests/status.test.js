@@ -1,15 +1,16 @@
 import request from 'supertest';
 import BestReadsBackendApp from '../src/app/BestReadsBackendApp.js';
 import RepositoryBuilder from '../src/Shared/persistence/RepositoryBuilder.js';
+import LoggerBuilder from '../src/Shared/logger/LoggerBuilder.js';
 // import MemoryUserRepository from '../src/infrastructure/repositories/memory.js';
-
+const logger = LoggerBuilder.build();
 describe('Server status', () => {
   let app;
   let repository;
 
   beforeEach(async () => {
     repository = await RepositoryBuilder.build('memory', '');
-    app = new BestReadsBackendApp(0, repository);
+    app = new BestReadsBackendApp(0, repository, logger);
     await app.start();
 
   })
