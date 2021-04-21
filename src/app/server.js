@@ -22,7 +22,7 @@ export class Server {
     registerRoutes(router, repository);
 
     router.use((err, _req, res, _next) => {
-      console.error(err);
+      this.logger.error(err);
       res.status(500).send(err.message);
     });
   }
