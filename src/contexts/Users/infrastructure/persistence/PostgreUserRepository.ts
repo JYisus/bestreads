@@ -1,11 +1,13 @@
-export default class PostgreUserRepository{
-  static isTableCreated = false;
+import { Repository } from '../../../../Shared/domain/Repository';
+import User from '../../domain/User';
+import { UserRepository } from '../../domain/UserRepository';
 
-  constructor(repository) {
-    this.repository = repository;
-  }
+export default class PostgreUserRepository implements UserRepository{
+  private static isTableCreated = false;
 
-  async save(user) {
+  constructor(private readonly repository: Repository) {}
+
+  async save(user: User) {
     const {
       username,
       email,
@@ -22,7 +24,7 @@ export default class PostgreUserRepository{
     });
   }
   
-  async findUserByEmail(email) {
+  async findUserByEmail(email: string) {
     if (!PostgreUserRepository.isTableCreated) {
       return [] 
     }
@@ -30,6 +32,8 @@ export default class PostgreUserRepository{
       text: 'SELECT * FROM users WHERE email = $1',
       values: [email],
     });
+
+    console.log(queryRes.rows)
 
     return queryRes.rows
   }

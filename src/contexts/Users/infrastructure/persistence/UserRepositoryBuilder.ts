@@ -1,7 +1,9 @@
-import PostgreUserRepository from './PostgreUserRepository.js';
+import PostgreUserRepository from './PostgreUserRepository';
+import { Repository } from '../../../../Shared/domain/Repository';
+import { UserRepository } from '../../domain/UserRepository';
 
 export default class UserRepositoryBuilder {
-  static build(repository) {
+  static build(repository: Repository): UserRepository {
     const environment = process.env.NODE_ENV || 'test';
     switch (environment) {
       case 'dev':

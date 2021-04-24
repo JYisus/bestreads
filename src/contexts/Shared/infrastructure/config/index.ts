@@ -7,7 +7,7 @@ const bestreadsConfig = convict({
     default: 'default',
     env: 'NODE_ENV',
   },
-  memory: {
+  postgre: {
     url: {
       doc: 'PostgreSQL Test connection URL',
       format: String,

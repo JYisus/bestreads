@@ -1,7 +1,8 @@
-import PinoLogger from './PinoLogger.js';
+import PinoLogger from './PinoLogger';
+import { Logger } from '../../domain/Logger';
 
 export default class LoggerBuilder {
-  static build() {
+  static build(): Logger {
     const env = process.env.NODE_ENV || 'test';
 
     switch(env) {
@@ -16,5 +17,9 @@ export default class LoggerBuilder {
           prettyPrint: true,
         });
     }
+    return new PinoLogger({
+      level: 'info',
+      prettyPrint: true,
+    });
   }
 }

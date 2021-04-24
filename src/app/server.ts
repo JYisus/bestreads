@@ -1,27 +1,41 @@
 import bodyParser from 'body-parser';
-import express from 'express';
+import express, { Express, Request, Response } from 'express';
 import Router from 'express-promise-router';
-import { registerRoutes } from './routes/index.js';
+import { registerRoutes } from './routes';
+import * as http from 'http';
+import { Repository } from '../Shared/domain/Repository';
+import { Logger } from '../Shared/domain/Logger';
 
 export default class Server {
-  constructor(port, controllers, repository, logger) {
-    this.port = port;
-    this.logger = logger;
+  private express: Express;
+  private httpServer?: http.Server; 
+
+  constructor(
+    private port: number,
+    private repository: Repository,
+    private logger: Logger,
+  ) {
     this.express = express();
     this.express.use(bodyParser.json());
     this.express.use(bodyParser.urlencoded({ extended: true }));
+  
     const router = Router();
     this.express.use(router);
 
-    registerRoutes(router, repository);
+    registerRoutes(router, this.repository);
 
-    router.use((err, _req, res) => {
+    router.use((
+      err: Error,
+      req: Request,
+      res: Response,
+      next: Function,
+     )  => {
       this.logger.error(err);
       res.status(500).send(err.message);
     });
   }
 
-  async listen() {
+  async listen(): Promise<void> {
     return new Promise((resolve) => {
       this.httpServer = this.express.listen(this.port, () => {
         this.logger.info(`BestReads Backend App is running at http://localhost:${this.port} int ${this.express.get('env')} mode`);
@@ -31,11 +45,11 @@ export default class Server {
     });
   }
 
-  getHTTPServer() {
+  getHTTPServer(): http.Server | undefined {
     return this.httpServer;
   }
 
-  async stop() {
+  async stop(): Promise<void> {
     return new Promise((resolve, reject) => {
       if (this.httpServer) {
         this.httpServer.close((error) => {
@@ -45,7 +59,6 @@ export default class Server {
           return resolve();
         });
       }
-
       return resolve();
     });
   }
