@@ -1,15 +1,15 @@
-import { PosrgreUserRepository } from './PostgreUserRepository.js';
+import PostgreUserRepository from './PostgreUserRepository.js';
 
 export default class UserRepositoryBuilder {
   static build(repository) {
     const environment = process.env.NODE_ENV || 'test';
     switch (environment) {
       case 'dev':
-        return new PosrgreUserRepository(repository);
+        return new PostgreUserRepository(repository);
       case 'test':
-        return new PosrgreUserRepository(repository);
+        return new PostgreUserRepository(repository);
       default:
-        throw Error(`UserRepositoryBuilder | Error getting environment`);
+        throw Error('UserRepositoryBuilder | Error getting environment');
     }
   }
 }

@@ -1,4 +1,5 @@
 import convict from 'convict';
+
 const bestreadsConfig = convict({
   env: {
     doc: 'Bestreads environment.',
@@ -11,9 +12,9 @@ const bestreadsConfig = convict({
       doc: 'PostgreSQL Test connection URL',
       format: String,
       env: 'DB',
-      default: 'postgres://postgres@localhost/mydb'
-    }
-  }
+      default: 'postgres://postgres@localhost/mydb',
+    },
+  },
 });
 
 export default bestreadsConfig;
