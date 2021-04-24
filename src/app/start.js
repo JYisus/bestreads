@@ -12,11 +12,11 @@ const runService = async () => {
 try {
   runService();
 } catch (error) {
-  console.err(error);
+  console.error(error);
   process.exit(1);
 }
 
 process.on('uncaughtException', (error) => {
-  console.err('uncaughtException', error);
+  console.error('uncaughtException', error);
   process.exit(1);
 });
