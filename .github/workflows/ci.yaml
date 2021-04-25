@@ -1,0 +1,25 @@
+name: CI
+
+on: [push]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v1
+
+      - name: Set up Node
+        uses: actions/setup-node@v2
+        with:
+          node-version: '14'
+
+      - name: Installing dependencies
+        run: npm install
+
+      - name: Starting testing postgre database
+        run: npx pg-test start
+
+      - name: Executing tests
+        run: npm test
