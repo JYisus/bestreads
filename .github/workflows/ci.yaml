@@ -35,3 +35,6 @@ jobs:
 
       - name: Executing tests
         run: npm test
+        env:
+          POSTGRES_HOST: localhost
+          POSTGRES_PORT: 5432 # ${{ job.services.postgres.ports[5432] }}
