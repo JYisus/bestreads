@@ -4,9 +4,9 @@ import User from '../src/contexts/Users/domain/User';
 import UserRepositoryBuilder from '../src/contexts/Users/infrastructure/persistence/UserRepositoryBuilder';
 import RepositoryBuilder from '../src/Shared/infrastructure/persistence/RepositoryBuilder';
 import LoggerBuilder from '../src/Shared/infrastructure/logger/LoggerBuilder';
-// import MemoryUserRepository from '../src/infrastructure/repositories/memory';
 import { Repository } from '../src/Shared/domain/Repository';
 import { UserRepository } from '../src/contexts/Users/domain/UserRepository';
+
 const logger = LoggerBuilder.build();
 describe('Users management', () => {
   let app: BestReadsBackendApp;
