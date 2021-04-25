@@ -1,15 +1,16 @@
 import request from 'supertest';
-import BestReadsBackendApp from '../src/app/BestReadsBackendApp.js';
-import RepositoryBuilder from '../src/Shared/persistence/RepositoryBuilder.js';
-import LoggerBuilder from '../src/Shared/logger/LoggerBuilder.js';
-// import MemoryUserRepository from '../src/infrastructure/repositories/memory.js';
+import BestReadsBackendApp from '../src/app/BestReadsBackendApp';
+import RepositoryBuilder from '../src/Shared/infrastructure/persistence/RepositoryBuilder';
+import LoggerBuilder from '../src/Shared/infrastructure/logger/LoggerBuilder';
+import { Repository } from '../src/Shared/domain/Repository';
+
 const logger = LoggerBuilder.build();
 describe('Server status', () => {
-  let app;
-  let repository;
+  let app: BestReadsBackendApp;
+  let repository: Repository;
 
   beforeEach(async () => {
-    repository = await RepositoryBuilder.build('memory', '');
+    repository = await RepositoryBuilder.build('postgre', '');
     app = new BestReadsBackendApp(0, repository, logger);
     await app.start();
 
@@ -20,7 +21,7 @@ describe('Server status', () => {
   });
 
   it('should return status 200 and a healthy message', async () => {
-    const response = await request(app.httpServer())
+    const response = await request(app.httpServer)
       .get('/status')
       .send()
       .expect(200);

@@ -18,7 +18,7 @@ export default class BestReadsBackendApp {
   }
 
   async stop(): Promise<void> {
-    await this.repository.close();
+    await this.repository?.close();
     await this.server?.stop();
   }
 
