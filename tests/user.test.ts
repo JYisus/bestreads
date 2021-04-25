@@ -21,9 +21,10 @@ describe('Users management', () => {
     await app.start();
   })
 
-  afterEach(async () => {
+  afterEach(async (done) => {
     await userRepository.deleteAll();
     await app.stop();
+    done();
   });
 
   describe('User creation', () => {
