@@ -13,8 +13,7 @@ describe('Server status', () => {
     repository = await RepositoryBuilder.build('postgre', '');
     app = new BestReadsBackendApp(0, repository, logger);
     await app.start();
-
-  })
+  });
 
   afterEach(async () => {
     await app.stop();
@@ -26,7 +25,6 @@ describe('Server status', () => {
       .send()
       .expect(200);
 
-    expect(response.body).toEqual(expect.objectContaining({status: 'healthy'}))
+    expect(response.body).toEqual(expect.objectContaining({ status: 'healthy' }));
   });
 });
-

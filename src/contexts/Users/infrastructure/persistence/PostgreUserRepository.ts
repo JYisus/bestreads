@@ -2,7 +2,7 @@ import { Repository } from '../../../../Shared/domain/Repository';
 import User from '../../domain/User';
 import { UserRepository } from '../../domain/UserRepository';
 
-export default class PostgreUserRepository implements UserRepository{
+export default class PostgreUserRepository implements UserRepository {
   constructor(private readonly repository: Repository) {}
 
   async save(user: User) {
@@ -18,17 +18,17 @@ export default class PostgreUserRepository implements UserRepository{
       values: [username, email, password],
     });
   }
-  
+
   async findUserByEmail(email: string): Promise<any[]> {
     const queryRes = await this.repository.query({
       text: 'SELECT * FROM users WHERE email = $1',
       values: [email],
     });
 
-    return queryRes
+    return queryRes;
   }
 
   async deleteAll() {
-      await this.repository.deleteTable('users');
+    await this.repository.deleteTable('users');
   }
 }

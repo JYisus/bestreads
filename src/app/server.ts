@@ -1,14 +1,15 @@
 import bodyParser from 'body-parser';
 import express, { Express, Request, Response } from 'express';
 import Router from 'express-promise-router';
-import { registerRoutes } from './routes';
 import * as http from 'http';
+import registerRoutes from './routes';
 import { Repository } from '../Shared/domain/Repository';
 import { Logger } from '../Shared/domain/Logger';
 
 export default class Server {
   private express: Express;
-  private httpServer?: http.Server; 
+
+  private httpServer?: http.Server;
 
   constructor(
     private port: number,
@@ -18,7 +19,7 @@ export default class Server {
     this.express = express();
     this.express.use(bodyParser.json());
     this.express.use(bodyParser.urlencoded({ extended: true }));
-  
+
     const router = Router();
     this.express.use(router);
 
@@ -29,7 +30,7 @@ export default class Server {
       req: Request,
       res: Response,
       next: Function,
-     )  => {
+    ) => {
       this.logger.error(err);
       res.status(500).send(err.message);
     });

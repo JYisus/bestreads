@@ -19,12 +19,11 @@ describe('Users management', () => {
     userRepository = UserRepositoryBuilder.build(repository);
     app = new BestReadsBackendApp(0, repository, logger);
     await app.start();
-  })
+  });
 
-  afterEach(async (done) => {
+  afterEach(async () => {
     await userRepository.deleteAll();
     await app.stop();
-    done();
   });
 
   describe('User creation', () => {
@@ -41,14 +40,14 @@ describe('Users management', () => {
       const username = 'user001';
       const password = 'password';
       const email = 'test@bestreads.com';
-      const user = new User(username, email, password)
+      const user = new User(username, email, password);
       await userRepository.save(user);
       const response = await request(app.httpServer)
         .put('/users')
         .send({ username, password, email })
         .expect(500);
-      
-      expect(response.body).toEqual(expect.objectContaining({ message: 'user with email test@bestreads.com already exists'}))
+
+      expect(response.body).toEqual(expect.objectContaining({ message: 'user with email test@bestreads.com already exists' }));
     });
   });
 });

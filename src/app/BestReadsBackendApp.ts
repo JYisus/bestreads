@@ -1,5 +1,5 @@
-import Server from './server';
 import * as http from 'http';
+import Server from './server';
 import { Logger } from '../Shared/domain/Logger';
 import { Repository } from '../Shared/domain/Repository';
 

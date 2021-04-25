@@ -5,7 +5,7 @@ export default class LoggerBuilder {
   static build(): Logger {
     const env = process.env.NODE_ENV || 'test';
 
-    switch(env) {
+    switch (env) {
       case 'test':
         return new PinoLogger({
           level: 'error',
@@ -16,6 +16,7 @@ export default class LoggerBuilder {
           level: 'info',
           prettyPrint: true,
         });
+      default:
     }
     return new PinoLogger({
       level: 'info',

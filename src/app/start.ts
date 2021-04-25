@@ -7,7 +7,7 @@ const runService = async () => {
   const logger = LoggerBuilder.build();
   const repository = await RepositoryBuilder.build('postgre', '');
   new BestReadsBackendApp(Number(port), repository, logger).start();
-}
+};
 
 try {
   runService();

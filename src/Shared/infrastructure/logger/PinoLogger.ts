@@ -3,6 +3,7 @@ import { Logger } from '../../domain/Logger';
 
 export default class PinoLogger implements Logger {
   private logger;
+
   constructor(options: pino.LoggerOptions) {
     this.logger = pino(options);
   }

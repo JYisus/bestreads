@@ -6,10 +6,11 @@ interface Query {
   values: any[],
 }
 // import config from '../../../../contexts/Shared/infrastructure/config/index.js';
-export class PostgreRepository implements Repository {
+export default class PostgreRepository implements Repository {
   private db?: Pool<any>;
+
   private client?: any;
-  // private readonly hostDB = process.env.DB || 'postgres://test-user@localhost/test-db';
+
   private readonly options = {
     host: process.env.POSTGRES_HOST || 'localhost',
     port: Number(process.env.POSTGRES_PORT) || 5432,
@@ -33,10 +34,11 @@ export class PostgreRepository implements Repository {
     const res = await this.db?.query(query.text, query.values);
     return res?.rows;
   }
+
   async deleteTable(table: string): Promise<void> {
     await this.db?.query(`
       TRUNCATE ${table}
-    `)
+    `);
   }
 
   async createTable(table: string): Promise<void> {
@@ -47,9 +49,8 @@ export class PostgreRepository implements Repository {
         password TEXT NOT NULL,
         email TEXT NOT NULL
       )
-    `)
+    `);
   }
-
 
   moduleName() {}
 
@@ -58,7 +59,7 @@ export class PostgreRepository implements Repository {
   }
 
   async persist(insertSQL: string) {
-    return await this.client.none(insertSQL);
+    return this.client.none(insertSQL);
   }
 
   async close() {

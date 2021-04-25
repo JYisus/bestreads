@@ -7,6 +7,7 @@ import { Repository } from '../../Shared/domain/Repository';
 
 export default class UserPutController {
   private repository: UserRepository;
+
   constructor(repository: Repository) {
     this.repository = UserRepositoryBuilder.build(repository);
   }
