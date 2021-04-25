@@ -9,9 +9,18 @@ interface Query {
 export class PostgreRepository implements Repository {
   private db?: Pool<any>;
   private client?: any;
-  private readonly hostDB = process.env.DB || 'postgres://test-user@localhost/test-db';
-  
+  // private readonly hostDB = process.env.DB || 'postgres://test-user@localhost/test-db';
+  private readonly options = {
+    host: 'localhost',
+    user: process.env.POSTGRES_USER || 'postgres',
+    password: process.env.POSTGRES_PASSWORD || 'postgres',
+    max: 20,
+    idleTimeoutMillis: 30000,
+    connectionTimeoutMillis: 2000,
+  };
+
   async connect(database: string) {
+    // this.db = new Pool({ connectionString: this.hostDB });
     this.db = new Pool({ connectionString: this.hostDB });
   }
 
