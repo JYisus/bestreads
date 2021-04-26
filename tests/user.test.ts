@@ -62,4 +62,22 @@ describe('Users management', () => {
       expect(userRegistered.password === user.password).toBeFalsy();
     });
   });
+  describe('user login', () => {
+    it('should successfully login if correct password is introduced', async () => {
+      const userData = { username: 'user001', password: 'password', email: 'test@bestreads.com' };
+      const credentials = { email: 'test@bestreads.com', password: 'password' };
+
+      await request(app.httpServer)
+        .put('/users')
+        .send(userData)
+        .expect(200);
+
+      const response = await request(app.httpServer)
+        .post('/users')
+        .send(credentials)
+        .expect(200);
+
+      expect(response.body).toEqual(expect.objectContaining({ message: 'Successfully loged in!' }));
+    });
+  });
 });

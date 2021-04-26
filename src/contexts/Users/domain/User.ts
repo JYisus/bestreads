@@ -24,4 +24,8 @@ export default class User {
       email: this.email,
     };
   }
+
+  async checkPassword(plainPassword: string, crypto: Crypto): Promise<boolean> {
+    return crypto.compare(plainPassword, this.password);
+  }
 }

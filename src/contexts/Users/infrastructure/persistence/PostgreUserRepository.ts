@@ -19,17 +19,23 @@ export default class PostgreUserRepository implements UserRepository {
     });
   }
 
-  async findUserByEmail(email: string): Promise<User | undefined> {
+  async findUserByEmail(requestedEmail: string): Promise<User | undefined> {
     const queryRes = await this.repository.query({
       text: 'SELECT * FROM users WHERE email = $1',
-      values: [email],
+      values: [requestedEmail],
     });
 
     if (queryRes.length === 0) {
       return undefined;
     }
 
-    return queryRes[0];
+    const {
+      username,
+      password,
+      email,
+    } = queryRes[0];
+
+    return new User(username, email, password);
   }
 
   async deleteAll() {

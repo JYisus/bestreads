@@ -1,4 +1,4 @@
-import { hash, compare } from 'bcrypt';
+import { hash, compare as compareBcrypt } from 'bcrypt';
 import Crypto from '../../domain/Crypto';
 
 export default class BcryptCrypto implements Crypto {
@@ -8,7 +8,7 @@ export default class BcryptCrypto implements Crypto {
     return hash(message, BcryptCrypto.saltRounds);
   }
 
-  async compare(encryptedMessage: string, hashMessage: string): Promise<boolean> {
-    return compare(encryptedMessage, hashMessage);
+  async compare(message: string, hashedMessage: string): Promise<boolean> {
+    return compareBcrypt(message, hashedMessage);
   }
 }
