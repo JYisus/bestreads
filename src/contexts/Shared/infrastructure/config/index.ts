@@ -12,7 +12,6 @@ const bestreadsConfig = convict({
       doc: 'PostgreSQL Test connection URL',
       format: String,
       env: 'DB',
-      default: 'postgres://postgres@localhost/mydb',
     },
   },
 });
