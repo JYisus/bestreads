@@ -1,3 +1,4 @@
+import format from 'pg-format';
 import { Repository } from '../../../../Shared/domain/Repository';
 import User from '../../domain/User';
 import { UserRepository } from '../../domain/UserRepository';
@@ -20,10 +21,12 @@ export default class PostgreUserRepository implements UserRepository {
   }
 
   async findUserByEmail(requestedEmail: string): Promise<User | undefined> {
-    const queryRes = await this.repository.query({
-      text: 'SELECT * FROM users WHERE email = $1',
-      values: [requestedEmail],
-    });
+    const sqlQuery = format('SELECT * FROM users WHERE email = %L', requestedEmail);
+    const queryRes = await this.repository.query2(sqlQuery);
+    // const queryRes = await this.repository.query({
+    //   text: 'SELECT * FROM users WHERE email = $1',
+    //   values: [requestedEmail],
+    // });
 
     if (queryRes.length === 0) {
       return undefined;
