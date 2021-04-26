@@ -24,6 +24,9 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
+      - name: Check secrets
+        run: docker run --rm -v "$(pwd):/proj" dxa4481/trufflehog --regex --entropy=False file:///proj
+
       - name: Set up Node
         uses: actions/setup-node@v2
         with:

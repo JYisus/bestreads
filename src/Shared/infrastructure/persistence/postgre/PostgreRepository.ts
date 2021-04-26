@@ -22,7 +22,6 @@ export default class PostgreRepository implements Repository {
   };
 
   async connect(database: string) {
-    // this.db = new Pool({ connectionString:  'postgresql://postgres:postgres@localhost/postgres'});
     this.db = new Pool(this.options);
   }
 
