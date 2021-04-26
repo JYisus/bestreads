@@ -1,3 +1,5 @@
+import Crypto from '../../../Shared/domain/Crypto';
+
 export default class User {
   constructor(
     private username: string,
@@ -5,8 +7,14 @@ export default class User {
     private password: string,
   ) {}
 
-  static create(username: string, email: string, password: string) {
-    return new User(username, email, password);
+  static async create(
+    username: string,
+    email: string,
+    password: string,
+    crypto: Crypto,
+  ): Promise<User> {
+    const encryptedPassword = await crypto.encrypt(password);
+    return new User(username, email, encryptedPassword);
   }
 
   getData(): { username: string, password: string, email: string } {

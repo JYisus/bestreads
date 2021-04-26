@@ -49,5 +49,17 @@ describe('Users management', () => {
 
       expect(response.body).toEqual(expect.objectContaining({ message: 'user with email test@bestreads.com already exists' }));
     });
+
+    it('should register user with encrypted password', async () => {
+      const user = { username: 'user001', password: 'password', email: 'test@bestreads.com' };
+      const response = await request(app.httpServer)
+        .put('/users')
+        .send(user)
+        .expect(200);
+
+      const [userRegistered] = await repository.query({ text: 'SELECT password FROM users WHERE email = $1', values: [user.email] });
+      expect(response.body).toEqual(expect.objectContaining({ message: 'user created!' }));
+      expect(userRegistered.password === user.password).toBeFalsy();
+    });
   });
 });
