@@ -12,18 +12,19 @@ services:
   bestreads-backend:
     hostname: bestreads-backend
     container_name: bestreads-backend
-    image: node:14
+    image: jyisus/bestreads-backend:latest
+    # image: node:14
     ports:
       - 3000:3000
     working_dir: /app
-    entrypoint: ["npm", "run", "dev"]
+    # entrypoint: ["npm", "run", "dev"]
     environment:
       - NODE_ENV=docker
       - POSTGRES_HOST=bestreads-postgres
-    volumes:
-      - type: bind
-        source: ./
-        target: /app
-      - /app/node_modules
+    # volumes:
+    #   - type: bind
+    #     source: ./
+    #     target: /app
+    #   - /app/node_modules
     depends_on:
       - "bestreads-postgres"
