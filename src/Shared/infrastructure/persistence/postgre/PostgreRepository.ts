@@ -25,8 +25,8 @@ export default class PostgreRepository implements Repository {
     this.db = new Pool(this.options);
   }
 
-  async insert(query: Query): Promise<void> {
-    await this.db?.query(query.text, query.values);
+  async insert(query: string): Promise<void> {
+    await this.db?.query(query);
   }
 
   async query(query: string): Promise<any[] | undefined> {

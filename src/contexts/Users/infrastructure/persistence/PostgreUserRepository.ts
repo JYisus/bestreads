@@ -13,11 +13,8 @@ export default class PostgreUserRepository implements UserRepository {
       password,
     } = user.getData();
 
-    // const insertSQL = `INSERT INTO users (username, email, password) VALUES (${username}, ${email}, ${password})`;
-    return this.repository.insert({
-      text: 'INSERT INTO users (username, email, password) VALUES ($1, $2, $3)',
-      values: [username, email, password],
-    });
+    const insertSQL = format('INSERT INTO users (username, email, password) VALUES (%L, %L, %L)', username, email, password);
+    return this.repository.insert(insertSQL);
   }
 
   async findUserByEmail(requestedEmail: string): Promise<User | undefined> {
