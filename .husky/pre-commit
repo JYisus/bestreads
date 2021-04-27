@@ -3,4 +3,3 @@
 
 npx detect-secrets-launcher src/**
 npx eslint .
-npm test
