@@ -22,7 +22,7 @@ export default class PostgreUserRepository implements UserRepository {
 
   async findUserByEmail(requestedEmail: string): Promise<User | undefined> {
     const sqlQuery = format('SELECT * FROM users WHERE email = %L', requestedEmail);
-    const queryRes = await this.repository.query2(sqlQuery);
+    const queryRes = await this.repository.query(sqlQuery);
     // const queryRes = await this.repository.query({
     //   text: 'SELECT * FROM users WHERE email = $1',
     //   values: [requestedEmail],

@@ -57,9 +57,9 @@ describe('Users management', () => {
         .send(user)
         .expect(200);
 
-      const [userRegistered] = await repository.query({ text: 'SELECT password FROM users WHERE email = $1', values: [user.email] });
+      const regUser = await userRepository.findUserByEmail(user.email);
       expect(response.body).toEqual(expect.objectContaining({ message: 'user created!' }));
-      expect(userRegistered.password === user.password).toBeFalsy();
+      expect(regUser?.getData().password === user.password).toBeFalsy();
     });
   });
   describe('user login', () => {

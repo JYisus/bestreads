@@ -29,13 +29,8 @@ export default class PostgreRepository implements Repository {
     await this.db?.query(query.text, query.values);
   }
 
-  async query2(query: string): Promise<any[] | undefined> {
+  async query(query: string): Promise<any[] | undefined> {
     const res = await this.db?.query(query);
-    return res?.rows;
-  }
-
-  async query(query: Query): Promise<any[] | undefined> {
-    const res = await this.db?.query(query.text, query.values);
     return res?.rows;
   }
 
