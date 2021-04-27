@@ -1,0 +1,29 @@
+version: "3"
+services:
+  bestreads-postgres:
+    hostname: bestreads-postgres
+    container_name: bestreads-postgres
+    image: postgres
+    environment:
+      - POSTGRES_PASSWORD=postgres
+    ports:
+      - 5432:5432
+    restart: always
+  bestreads-backend:
+    hostname: bestreads-backend
+    container_name: bestreads_backend
+    image: node:14
+    ports:
+      - 3000:3000
+    working_dir: /app
+    entrypoint: ["npm", "run", "dev"]
+    environment:
+      - NODE_ENV=docker
+      - POSTGRES_HOST=bestreads-postgres
+    volumes:
+      - type: bind
+        source: ./
+        target: /app
+      - /app/node_modules
+    depends_on:
+      - "bestreads-postgres"

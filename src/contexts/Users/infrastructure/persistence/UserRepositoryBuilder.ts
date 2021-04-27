@@ -10,6 +10,8 @@ export default class UserRepositoryBuilder {
         return new PostgreUserRepository(repository);
       case 'test':
         return new PostgreUserRepository(repository);
+      case 'docker':
+        return new PostgreUserRepository(repository);
       default:
         throw Error('UserRepositoryBuilder | Error getting environment');
     }
