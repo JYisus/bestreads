@@ -27,6 +27,8 @@ jobs:
       - name: Check secrets
         run: docker run --rm -v "$(pwd):/proj" dxa4481/trufflehog --regex --entropy=False --max_depth=1 file:///proj
 
+      - name: Scanning dependencies
+        run: npm audit
   # # Initializes the CodeQL tools for scanning.
   #     - name: Initialize CodeQL
   #       uses: github/codeql-action/init@v1
