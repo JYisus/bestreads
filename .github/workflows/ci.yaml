@@ -49,25 +49,22 @@ jobs:
           POSTGRES_HOST: localhost
           POSTGRES_PORT: 5432 # ${{ job.services.postgres.ports[5432] }}
       
-      - name: Set up Docker Build
-        uses: docker/setup-buildx-action@v1
-        with:
-          install: true
+      # - name: Set up Docker Build
+      #   uses: docker/setup-buildx-action@v1
+      #   with:
+          # install: true
 
       - name: Build Docker image
         run: |
           docker build . -t localbuild/bestreads-backend:latest
-
-      # - name: Container Scanning
-      #   uses: hands-lab/dockle-action@v1
-      #   with:
-      #     image: 'localbuild/bestreads-backend:latest'
-      #     exit-code: '1'
-      #     exit-level: FATAL
-
-      - name: Executer continer
-        run: |
           docker run -e NODE_ENV=docker -e POSTGRES_HOST=postgres -d localbuild/bestreads-backend:latest -p 3000:3000
+
+      - name: Container Scanning
+        uses: hands-lab/dockle-action@v1
+        with:
+          image: 'localbuild/bestreads-backend:latest'
+          exit-code: '1'
+          exit-level: FATAL
 
       - name: DAST OWASP Scanning
         uses: zaproxy/action-baseline@v0.4.0
