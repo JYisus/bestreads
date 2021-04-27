@@ -11,7 +11,7 @@ services:
     restart: always
   bestreads-backend:
     hostname: bestreads-backend
-    container_name: bestreads_backend
+    container_name: bestreads-backend
     image: node:14
     ports:
       - 3000:3000
