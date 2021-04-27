@@ -80,7 +80,7 @@ jobs:
           POSTGRES_HOST: localhost
           POSTGRES_PORT: 5432 # ${{ job.services.postgres.ports[5432] }}
 
-      - name: DAST OWASP Scanning
-        uses: zaproxy/action-baseline@v0.4.0
-        with:
-          target: http://bestreads_backend:3000
+      # - name: DAST OWASP Scanning
+      #   uses: zaproxy/action-baseline@v0.4.0
+      #   with:
+      #     target: http://bestreads_backend:3000
