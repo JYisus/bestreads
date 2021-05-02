@@ -52,12 +52,18 @@ jobs:
       # - name: Set up Docker Build
       #   uses: docker/setup-buildx-action@v1
       #   with:
-          # install: true
+      # install: true
+      - uses: docker/build-push-action@v2
+        with:
+          tags: localbuild/bestreads-backend:latest
+          push: false
 
-      - name: Build Docker image
-        run: |
-          docker build . -t localbuild/bestreads-backend:latest
-          docker run -e NODE_ENV=docker -e POSTGRES_HOST=postgres -d localbuild/bestreads-backend:latest -p 3000:3000
+      - name: Run container image
+        uses: addnab/docker-run-action@v3
+        with:
+          image: localbuild/bestreads-backend:latest
+          # docker build . -t localbuild/bestreads-backend:latest
+          # docker run -e NODE_ENV=docker -e POSTGRES_HOST=postgres -d localbuild/bestreads-backend:latest -p 3000:3000
 
       - name: Container Scanning
         uses: hands-lab/dockle-action@v1
