@@ -75,41 +75,12 @@ jobs:
   dast-analysis:
     needs: build
     runs-on: ubuntu-20.04
-    services:
-      postgres:
-        image: postgres
-        env:
-          POSTGRES_USER: postgres
-          POSTGRES_PASSWORD: postgres
-        ports:
-          - 5432:5432
-        options: >-
-          --health-cmd pg_isready
-          --health-interval 10s
-          --health-timeout 5s
-      bestreads:
-        image: localbuild/bestreads-backend:latest
-        env:
-          NODE_ENV: docker
-          POSTGRES_HOST: postgres
-        ports:
-          - 3000:3000
-
     steps:
-      # - name: DAST OWASP Scanning
-      #   uses: zaproxy/action-baseline@v0.4.0
-      #   with:
-      #     target: http://localhost:3000 
       - uses: actions/checkout@v2
       - name: Run Bestreads api
-        run: docker run --rm --detach --publish 3000:3000 --name bestreads-backend localbuild/bestreads-backend:latest
+        run: docker-compose up -d
       - name: HawkScan
         uses: stackhawk/hawkscan-action@v1.2
         with:
           apiKey: ${{ secrets.HAWK_API_KEY }}
-        # - name: Run container image
-  #       uses: addnab/docker-run-action@v3
-  #       with:
-  #         image: localbuild/bestreads-backend:latest
-  #         # docker build . -t localbuild/bestreads-backend:latest
-  #         # docker run -e NODE_ENV=docker -e POSTGRES_HOST=postgres -d localbuild/bestreads-backend:latest -p 3000:3000
+          network: bestreads-net

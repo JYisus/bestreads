@@ -28,3 +28,6 @@ services:
     #   - /app/node_modules
     depends_on:
       - "bestreads-postgres"
+networks:
+  bestreads-net:
+    name: bestreads-net
