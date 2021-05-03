@@ -6,12 +6,14 @@ jobs:
   secrets-analysis:
     runs-on: ubuntu-20.04
     steps:
+      - uses: actions/checkout@v2
       - name: Check secrets
-      - run: docker run --rm -v "$(pwd):/proj" dxa4481/trufflehog --regex --entropy=False --max_depth=1 file:///proj
+        run: docker run --rm -v "$(pwd):/proj" dxa4481/trufflehog --regex --entropy=False --max_depth=1 file:///proj
 
   static-analysis:
     runs-on: ubuntu-20.04
     steps:
+    - uses: actions/checkout@v2
     - name: Scanning dependencies
       run: npm audit
     - name: SAST njsscan
@@ -19,7 +21,7 @@ jobs:
       with:
         args: './src'
 
-  build:
+  test:
     runs-on: ubuntu-20.04
     services:
       postgres:
@@ -36,46 +38,78 @@ jobs:
           --health-retries 5
 
     steps:
+    - uses: actions/checkout@v2
+    - name: Set up Node
+      uses: actions/setup-node@v2
+      with:
+        node-version: '14'
+    - name: Installing dependencies
+      run: npm ci
+    - name: Executing tests
+      run: npm test
+      env:
+        POSTGRES_HOST: localhost
+        POSTGRES_PORT: 5432
+
+  build:
+    needs:  [secrets-analysis, static-analysis, test]
+    runs-on: ubuntu-20.04
+    steps:
       - uses: actions/checkout@v2
 
-      - name: Set up Node
-        uses: actions/setup-node@v2
-        with:
-          node-version: '14'
-
-      - name: Installing dependencies
-        run: npm install
-
-      - name: Executing tests
-        run: npm test
-        env:
-          POSTGRES_HOST: localhost
-          POSTGRES_PORT: 5432 # ${{ job.services.postgres.ports[5432] }}
-      
       # - name: Set up Docker Build
       #   uses: docker/setup-buildx-action@v1
       #   with:
-      # install: true
+      #     install: true
       - uses: docker/build-push-action@v2
         with:
+          context: .
           tags: localbuild/bestreads-backend:latest
           push: false
+      # - name: Image Scanning
+      #   uses: hands-lab/dockle-action@v1
+      #   with:
+      #     image: 'localbuild/bestreads-backend:latest'
+      #     exit-code: '1'
+      #     exit-level: FATAL
+  dast-analysis:
+    needs: build
+    runs-on: ubuntu-20.04
+    services:
+      postgres:
+        image: postgres
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+      bestreads:
+        image: localbuild/bestreads-backend:latest
+        env:
+          NODE_ENV: docker
+          POSTGRES_HOST: postgres
+        ports:
+          - 3000:3000
 
-      - name: Run container image
-        uses: addnab/docker-run-action@v3
+    steps:
+      # - name: DAST OWASP Scanning
+      #   uses: zaproxy/action-baseline@v0.4.0
+      #   with:
+      #     target: http://localhost:3000 
+      - uses: actions/checkout@v2
+      - name: Run Bestreads api
+        run: docker run --rm --detach --publish 3000:3000 --name bestreads-backend localbuild/bestreads-backend:latest
+      - name: HawkScan
+        uses: stackhawk/hawkscan-action@v1.2
         with:
-          image: localbuild/bestreads-backend:latest
-          # docker build . -t localbuild/bestreads-backend:latest
-          # docker run -e NODE_ENV=docker -e POSTGRES_HOST=postgres -d localbuild/bestreads-backend:latest -p 3000:3000
-
-      - name: Container Scanning
-        uses: hands-lab/dockle-action@v1
-        with:
-          image: 'localbuild/bestreads-backend:latest'
-          exit-code: '1'
-          exit-level: FATAL
-
-      - name: DAST OWASP Scanning
-        uses: zaproxy/action-baseline@v0.4.0
-        with:
-          target: http://localhost:3000
+          apiKey: ${{ secrets.HAWK_API_KEY }}
+        # - name: Run container image
+  #       uses: addnab/docker-run-action@v3
+  #       with:
+  #         image: localbuild/bestreads-backend:latest
+  #         # docker build . -t localbuild/bestreads-backend:latest
+  #         # docker run -e NODE_ENV=docker -e POSTGRES_HOST=postgres -d localbuild/bestreads-backend:latest -p 3000:3000
