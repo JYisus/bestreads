@@ -3,10 +3,24 @@ name: CI
 on: [push]
 
 jobs:
+  secrets-analysis:
+    runs-on: ubuntu-20.04
+    steps:
+      - name: Check secrets
+      - run: docker run --rm -v "$(pwd):/proj" dxa4481/trufflehog --regex --entropy=False --max_depth=1 file:///proj
+
+  static-analysis:
+    runs-on: ubuntu-20.04
+    steps:
+    - name: Scanning dependencies
+      run: npm audit
+    - name: SAST njsscan
+      uses: ajinabraham/njsscan-action@master
+      with:
+        args: './src'
+
   build:
-
-    runs-on: ubuntu-latest
-
+    runs-on: ubuntu-20.04
     services:
       postgres:
         image: postgres
@@ -23,17 +37,6 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
-
-      - name: Check secrets
-        run: docker run --rm -v "$(pwd):/proj" dxa4481/trufflehog --regex --entropy=False --max_depth=1 file:///proj
-
-      - name: Scanning dependencies
-        run: npm audit
-
-      - name: SAST njsscan
-        uses: ajinabraham/njsscan-action@master
-        with:
-          args: './src'
 
       - name: Set up Node
         uses: actions/setup-node@v2
