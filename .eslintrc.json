@@ -1,6 +1,12 @@
 {
-    "extends": ["airbnb-typescript"],
-    "plugins": ["@typescript-eslint"],
+    "extends": [
+      "airbnb-typescript",
+      "plugin:security/recommended"
+    ],
+    "plugins": [
+      "@typescript-eslint",
+      "security"
+    ],
     "parserOptions": {
       "project": "./tsconfig.json"
     },
