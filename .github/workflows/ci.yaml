@@ -17,10 +17,6 @@ jobs:
     - name: Scanning dependencies
       run: npm audit
 
-    # - name: SAST njsscan
-    #   uses: ajinabraham/njsscan-action@master
-    #   with:
-    #     args: './src'
     - name: Semgrep Scan
       uses: returntocorp/semgrep-action@v1
       with:
