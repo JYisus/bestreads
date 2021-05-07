@@ -5,3 +5,4 @@ dist
 report_md.md
 report_html.html
 report_json.json
+**/tmp*
