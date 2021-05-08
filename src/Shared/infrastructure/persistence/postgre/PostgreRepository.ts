@@ -1,6 +1,8 @@
 import Pool from 'pg-pool';
 import { Repository } from '../../../domain/Repository';
 
+const ENDPOINT = 'postgres://test-user@localhost/test-db';
+
 interface Query {
   text: string,
   values: any[],

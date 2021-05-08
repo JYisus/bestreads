@@ -1,7 +1,6 @@
 import BestReadsBackendApp from './BestReadsBackendApp';
 import RepositoryBuilder from '../Shared/infrastructure/persistence/RepositoryBuilder';
 import LoggerBuilder from '../Shared/infrastructure/logger/LoggerBuilder';
-const PASSWORD = 'TESTINGTRUFFLEHOG';
 
 const port = process.env.PORT || 3000;
 const runService = async () => {
