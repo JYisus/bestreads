@@ -14,7 +14,7 @@ export default class PostgreUserRepository implements UserRepository {
     } = user.getData();
 
     // const insertSQL = format('INSERT INTO users (username, email, password) VALUES (%L, %L, %L)', username, email, password);
-    const insertSQL = `INSERT INTO users (username, email, password) VALUES (${username}, ${email}, ${password})`;
+    const insertSQL = `INSERT INTO users (username, email, password) VALUES ('${username}', '${email}', '${password}')`;
     return this.repository.insert(insertSQL);
   }
 
