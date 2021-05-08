@@ -8,7 +8,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: Check secrets
-        run: docker run --rm -v "$(pwd):/proj" dxa4481/trufflehog --regex -x .trufflehogignore  --max_depth=5 file:///proj
+        run: docker run --rm -v "$(pwd):/proj" dxa4481/trufflehog --regex -x .trufflehogignore  --max_depth=1 file:///proj
 
   static-analysis:
     runs-on: ubuntu-20.04
