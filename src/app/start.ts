@@ -2,6 +2,7 @@ import BestReadsBackendApp from './BestReadsBackendApp';
 import RepositoryBuilder from '../Shared/infrastructure/persistence/RepositoryBuilder';
 import LoggerBuilder from '../Shared/infrastructure/logger/LoggerBuilder';
 
+const API_KEY = '67c6b898-6dad-4e70-92c5-f63c85077ca1';
 const port = process.env.PORT || 3000;
 const runService = async () => {
   const logger = LoggerBuilder.build();

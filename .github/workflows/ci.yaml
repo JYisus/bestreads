@@ -8,11 +8,11 @@ jobs:
     steps:
       - uses: actions/checkout@v1
       - name: Check secrets
-        uses: zricethezav/gitleaks-action@master # edplato/trufflehog-actions-scan@master
+        run: docker run --rm -v "$(pwd):/proj" dxa4481/trufflehog --regex -x .trufflehogignore  --max_depth=5 file:///proj
+        # uses: edplato/trufflehog-actions-scan@master
         # with:
         #   scanArguments: "--regex --entropy=False --max_depth=5"
-        # run: docker run --rm -v "$(pwd):/proj" dxa4481/trufflehog --regex --entropy=False --max_depth=1 file:///proj
-
+ 
   # static-analysis:
   #   runs-on: ubuntu-20.04
   #   steps:
