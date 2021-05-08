@@ -1,4 +1,4 @@
 #!/bin/sh
 . "$(dirname "$0")/_/husky.sh"
 
-npx eslint . && npx detect-secrets-launcher src/**/*.ts
+npm run lint
