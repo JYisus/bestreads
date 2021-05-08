@@ -8,7 +8,7 @@
     "start": "NODE_ENV=dev ts-node-dev ./src/app/start.ts",
     "dev": "npm install && ts-node-dev --poll --files ./src/app/start.ts",
     "test": "NODE_ENV=test npx jest ./tests npx jest ./tests --forceExit",
-    "find:secrets": "npx detect-secrets-launcher $(git ls-files) --exclude-secrets='password' --exclude-files package.json",
+    "find:secrets": "npx detect-secrets-launcher $(git ls-files) --exclude-secrets='password' --exclude-lines='POSTGRES_PASSWORD'  --exclude-files package.json",
     "lint": "npx eslint .",
     "prepare": "husky install"
   },
