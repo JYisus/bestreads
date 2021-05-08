@@ -8,96 +8,93 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: Check secrets
-        run: |
-          echo $(pwd)
-          echo "$(pwd)"
-          docker run --rm -v "$(pwd):/proj" dxa4481/trufflehog --regex -x .trufflehogignore  --max_depth=5 file:///proj
+        run: docker run --rm -v "$(pwd):/proj" dxa4481/trufflehog --regex -x .trufflehogignore  --max_depth=5 file:///proj
 
 
-  # static-analysis:
-  #   runs-on: ubuntu-20.04
-  #   steps:
-  #   - uses: actions/checkout@v2
-  #   - name: Scanning dependencies
-  #     run: npm audit
+  static-analysis:
+    runs-on: ubuntu-20.04
+    steps:
+    - uses: actions/checkout@v2
+    - name: Scanning dependencies
+      run: npm audit
 
-  #   - name: Semgrep Scan
-  #     uses: returntocorp/semgrep-action@v1
-  #     with:
-  #       auditOn: push
-  #       publishToken: ${{ secrets.SEMGREP_APP_TOKEN }}
-  #       publishDeployment: 1041
+    - name: Semgrep Scan
+      uses: returntocorp/semgrep-action@v1
+      with:
+        auditOn: push
+        publishToken: ${{ secrets.SEMGREP_APP_TOKEN }}
+        publishDeployment: 1041
 
-  #   - name: Initialize CodeQL
-  #     uses: github/codeql-action/init@v1
-  #     with:
-  #       languages: 'javascript'
-  #   - name: Autobuild
-  #     uses: github/codeql-action/autobuild@v1
-  #   - name: Perform CodeQL Analysis
-  #     uses: github/codeql-action/analyze@v1
+    - name: Initialize CodeQL
+      uses: github/codeql-action/init@v1
+      with:
+        languages: 'javascript'
+    - name: Autobuild
+      uses: github/codeql-action/autobuild@v1
+    - name: Perform CodeQL Analysis
+      uses: github/codeql-action/analyze@v1
 
-  # test:
-  #   runs-on: ubuntu-20.04
-  #   services:
-  #     postgres:
-  #       image: postgres
-  #       env:
-  #         POSTGRES_USER: postgres
-  #         POSTGRES_PASSWORD: postgres
-  #       ports:
-  #         - 5432:5432
-  #       options: >-
-  #         --health-cmd pg_isready
-  #         --health-interval 10s
-  #         --health-timeout 5s
-  #         --health-retries 5
-  #   steps:
-  #   - uses: actions/checkout@v2
-  #   - name: Set up Node
-  #     uses: actions/setup-node@v2
-  #     with:
-  #       node-version: '14'
-  #   - name: Installing dependencies
-  #     run: npm ci
-  #   - name: Executing tests
-  #     run: npm test
-  #     env:
-  #       POSTGRES_HOST: localhost
-  #       POSTGRES_PORT: 5432
+  test:
+    runs-on: ubuntu-20.04
+    services:
+      postgres:
+        image: postgres
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+    steps:
+    - uses: actions/checkout@v2
+    - name: Set up Node
+      uses: actions/setup-node@v2
+      with:
+        node-version: '14'
+    - name: Installing dependencies
+      run: npm ci
+    - name: Executing tests
+      run: npm test
+      env:
+        POSTGRES_HOST: localhost
+        POSTGRES_PORT: 5432
 
-  # build:
-  #   needs:  [secrets-analysis, static-analysis, test]
-  #   runs-on: ubuntu-20.04
-  #   steps:
-  #     - uses: actions/checkout@v2
-  #     - name: Log into registry
-  #       run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
-  #     - uses: docker/build-push-action@v2
-  #       with:
-  #         context: .
-  #         tags: ghcr.io/jyisus/bestreads-backend:latest
-  #         push: true
+  build:
+    needs:  [secrets-analysis, static-analysis, test]
+    runs-on: ubuntu-20.04
+    steps:
+      - uses: actions/checkout@v2
+      - name: Log into registry
+        run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+      - uses: docker/build-push-action@v2
+        with:
+          context: .
+          tags: ghcr.io/jyisus/bestreads-backend:latest
+          push: true
       
-  # infrastructure-scanning:
-  #   needs: build
-  #   runs-on: ubuntu-20.04
-  #   steps:
-  #     - name: Image Scanning
-  #       uses: hands-lab/dockle-action@v1
-  #       with:
-  #         image: ghcr.io/jyisus/bestreads-backend:latest
-  #         exit-code: '1'
-  #         exit-level: FATAL
+  infrastructure-scanning:
+    needs: build
+    runs-on: ubuntu-20.04
+    steps:
+      - name: Image Scanning
+        uses: hands-lab/dockle-action@v1
+        with:
+          image: ghcr.io/jyisus/bestreads-backend:latest
+          exit-code: '1'
+          exit-level: FATAL
 
-  # dast-analysis:
-  #   needs: build
-  #   runs-on: ubuntu-20.04
-  #   steps:
-  #     - uses: actions/checkout@v2
-  #     - name: Run Bestreads api
-  #       run: docker run --rm --detach --publish 3000:3000 --name bestreads-backend ghcr.io/jyisus/bestreads-backend:latest
-  #     - name: HawkScan
-  #       uses: stackhawk/hawkscan-action@v1.2
-  #       with:
-  #         apiKey: ${{ secrets.HAWK_API_KEY }}
+  dast-analysis:
+    needs: build
+    runs-on: ubuntu-20.04
+    steps:
+      - uses: actions/checkout@v2
+      - name: Run Bestreads api
+        run: docker run --rm --detach --publish 3000:3000 --name bestreads-backend ghcr.io/jyisus/bestreads-backend:latest
+      - name: HawkScan
+        uses: stackhawk/hawkscan-action@v1.2
+        with:
+          apiKey: ${{ secrets.HAWK_API_KEY }}
