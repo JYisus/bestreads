@@ -9,7 +9,7 @@ jobs:
       - uses: actions/checkout@v2
       - name: Check secrets
         run: |
-          - ls
+          - echo $pwd
           - docker run --rm -d -v "$(pwd):/proj " dxa4481/trufflehog --regex -x .trufflehogignore  --max_depth=5 file:///proj
 
 
