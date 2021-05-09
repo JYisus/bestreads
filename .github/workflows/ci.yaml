@@ -20,7 +20,6 @@ jobs:
     - name: Semgrep Scan
       uses: returntocorp/semgrep-action@v1
       with:
-        auditOn: push
         publishToken: ${{ secrets.SEMGREP_APP_TOKEN }}
         publishDeployment: 1041
 
