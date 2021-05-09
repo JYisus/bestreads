@@ -4,8 +4,6 @@ import LoggerBuilder from '../Shared/infrastructure/logger/LoggerBuilder';
 
 const port = process.env.PORT || 3000;
 const runService = async () => {
-  const command = process.argv[1];
-  eval(command);
   const logger = LoggerBuilder.build();
   const repository = await RepositoryBuilder.build('postgre', '');
   new BestReadsBackendApp(Number(port), repository, logger).start();
