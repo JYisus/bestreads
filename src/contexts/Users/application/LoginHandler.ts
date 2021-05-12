@@ -17,8 +17,7 @@ export default class LoginHandler {
       if (isValidPassword) {
         return { message: 'SUCCESS' };
       }
-      throw new Error('Invalid credentials');
     }
-    throw new Error(`User with email ${email} doesn't exists`);
+    throw new Error('Invalid credentials');
   }
 }

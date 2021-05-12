@@ -29,7 +29,7 @@ describe('Users management', () => {
   describe('User creation', () => {
     it('should return status 200 and a healthy message if a user is created', async () => {
       const response = await request(app.httpServer)
-        .put('/users')
+        .post('/users')
         .send({ username: 'user001', password: 'password', email: 'test@bestreads.com' })
         .expect(200);
 
@@ -53,7 +53,7 @@ describe('Users management', () => {
     it('should register user with encrypted password', async () => {
       const user = { username: 'user001', password: 'password', email: 'test@bestreads.com' };
       const response = await request(app.httpServer)
-        .put('/users')
+        .post('/users')
         .send(user)
         .expect(200);
 
@@ -68,16 +68,44 @@ describe('Users management', () => {
       const credentials = { email: 'test@bestreads.com', password: 'password' };
 
       await request(app.httpServer)
-        .put('/users')
+        .post('/users')
         .send(userData)
         .expect(200);
 
       const response = await request(app.httpServer)
-        .post('/users')
+        .post('/login')
         .send(credentials)
         .expect(200);
 
       expect(response.body).toEqual(expect.objectContaining({ message: 'Successfully loged in!' }));
+    });
+
+    it('should return error if credentials are not valid', async () => {
+      const userData = { username: 'user001', password: 'password', email: 'test@bestreads.com' };
+      const credentials = { email: 'test@bestreads.com', password: 'incorrect password' };
+
+      await request(app.httpServer)
+        .post('/users')
+        .send(userData)
+        .expect(200);
+
+      const response = await request(app.httpServer)
+        .post('/login')
+        .send(credentials)
+        .expect(500);
+
+      expect(response.body).toEqual(expect.objectContaining({ message: 'Invalid credentials' }));
+    });
+
+    it('should return error if user doesnt exists', async () => {
+      const credentials = { email: 'test@bestreads.com', password: 'incorrect password' };
+
+      const response = await request(app.httpServer)
+        .post('/login')
+        .send(credentials)
+        .expect(500);
+
+      expect(response.body).toEqual(expect.objectContaining({ message: 'Invalid credentials' }));
     });
   });
   describe('delete user', () => {
@@ -85,7 +113,7 @@ describe('Users management', () => {
       const userData = { username: 'user001', password: 'password', email: 'test@bestreads.com' };
 
       await request(app.httpServer)
-        .put('/users')
+        .post('/users')
         .send(userData)
         .expect(200);
 
