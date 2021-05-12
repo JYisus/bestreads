@@ -80,4 +80,34 @@ describe('Users management', () => {
       expect(response.body).toEqual(expect.objectContaining({ message: 'Successfully loged in!' }));
     });
   });
+  describe('delete user', () => {
+    it('should delete a user if it exists', async () => {
+      const userData = { username: 'user001', password: 'password', email: 'test@bestreads.com' };
+
+      await request(app.httpServer)
+        .put('/users')
+        .send(userData)
+        .expect(200);
+
+      const response = await request(app.httpServer)
+        .delete('/users')
+        .send({ email: 'test@bestreads.com' })
+        .expect(200);
+
+      const res = await userRepository.findUserByEmail(userData.email);
+
+      expect(response.body).toEqual(expect.objectContaining({ message: 'User deleted successfully!' }));
+      expect(res).toBeUndefined();
+    });
+
+    it('should return 500 if user already exists', async () => {
+      const response = await request(app.httpServer)
+        .delete('/users')
+        .send({ email: 'test@bestreads.com' })
+        .expect(500);
+
+      expect(response.body)
+        .toEqual(expect.objectContaining({ message: 'User with email test@bestreads.com doesn\'t exist!' }));
+    });
+  });
 });
