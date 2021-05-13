@@ -43,7 +43,7 @@ describe('Users management', () => {
       const user = new User(username, email, password);
       await userRepository.save(user);
       const response = await request(app.httpServer)
-        .put('/users')
+        .post('/users')
         .send({ username, password, email })
         .expect(500);
 
@@ -108,6 +108,7 @@ describe('Users management', () => {
       expect(response.body).toEqual(expect.objectContaining({ message: 'Invalid credentials' }));
     });
   });
+
   describe('delete user', () => {
     it('should delete a user if it exists', async () => {
       const userData = { username: 'user001', password: 'password', email: 'test@bestreads.com' };
@@ -131,6 +132,38 @@ describe('Users management', () => {
     it('should return 500 if user already exists', async () => {
       const response = await request(app.httpServer)
         .delete('/users')
+        .send({ email: 'test@bestreads.com' })
+        .expect(500);
+
+      expect(response.body)
+        .toEqual(expect.objectContaining({ message: 'User with email test@bestreads.com doesn\'t exist!' }));
+    });
+  });
+
+  describe('modify user', () => {
+    it('should modify a user data', async () => {
+      const userData = { username: 'user001', password: 'password', email: 'test@bestreads.com' };
+      const modifiedUserData = { username: 'user001', password: 'password', email: 'test@bestreads.com' };
+
+      await request(app.httpServer)
+        .post('/users')
+        .send(userData)
+        .expect(200);
+
+      const response = await request(app.httpServer)
+        .put('/users')
+        .send(modifiedUserData)
+        .expect(200);
+
+      const modifiedUser = await userRepository.findUserByEmail(userData.email);
+
+      expect(response.body).toEqual(expect.objectContaining({ message: 'User successfully modified!' }));
+      expect(modifiedUser?.getData()).toEqual(expect.objectContaining(modifiedUser));
+    });
+
+    it('should return 500 if user already exists', async () => {
+      const response = await request(app.httpServer)
+        .put('/users')
         .send({ email: 'test@bestreads.com' })
         .expect(500);
 

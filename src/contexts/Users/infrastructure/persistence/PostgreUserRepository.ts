@@ -1,6 +1,7 @@
 import format from 'pg-format';
 import { Repository } from '../../../../Shared/domain/Repository';
 import User from '../../domain/User';
+import { UserData } from '../../domain/UserData';
 import { UserRepository } from '../../domain/UserRepository';
 
 export default class PostgreUserRepository implements UserRepository {
@@ -36,6 +37,20 @@ export default class PostgreUserRepository implements UserRepository {
 
   async deleteUserWithEmail(email: string): Promise<void> {
     const sqlQuery = format('DELETE FROM users WHERE email = %L', email);
+    await this.repository.query(sqlQuery);
+  }
+
+  async modifyUserWithEmail(email: string, newData: UserData) {
+    const {
+      username,
+      password,
+      email: newEmail,
+    } = newData;
+
+    const sqlQuery = format(
+      'UPDATE users SET username = %L, email = %L, password = %L where email = %L',
+      username, newEmail, password, email,
+    );
     await this.repository.query(sqlQuery);
   }
 
