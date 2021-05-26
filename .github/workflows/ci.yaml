@@ -86,7 +86,7 @@ jobs:
           exit-code: '1'
           exit-level: FATAL
       - name: Trivy Scanning
-        run: docker run --rm -v aquasec/trivy ghcr.io/jyisus/bestreads-backend:latest 
+        run: docker run --rm -v "/var/run/docker.sock:/var/run/docker.sock" aquasec/trivy ghcr.io/jyisus/bestreads-backend:latest 
 
   push-image:
     needs: infrastructure-scanning
