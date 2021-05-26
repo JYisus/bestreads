@@ -87,8 +87,9 @@ jobs:
           exit-level: FATAL
       - name: Trivy Scanning
         run: docker run --rm -v aquasec/trivy ghcr.io/jyisus/bestreads-backend:latest 
+
   push-image:
-    needs: [secret]
+    needs: infrastructure-scanning
     runs-on: ubuntu-20.04
     steps:
       - uses: actions/checkout@v2
