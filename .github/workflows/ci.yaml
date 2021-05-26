@@ -73,8 +73,8 @@ jobs:
         with:
           context: .
           tags: ghcr.io/jyisus/bestreads-backend:latest
-          push: true
-      
+          push: false
+
   infrastructure-scanning:
     needs: build
     runs-on: ubuntu-20.04
@@ -85,6 +85,19 @@ jobs:
           image: ghcr.io/jyisus/bestreads-backend:latest
           exit-code: '1'
           exit-level: FATAL
+      - name: Trivy Scanning
+        run: docker run --rm -v aquasec/trivy ghcr.io/jyisus/bestreads-backend:latest 
+  push-image:
+    needs: [secret]
+    runs-on: ubuntu-20.04
+    steps:
+      - uses: actions/checkout@v2
+      - name: Push image to GitHub Registry
+        uses: docker/build-push-action@v2
+        with:
+          context: .
+          tags: ghcr.io/jyisus/bestreads-backend:latest
+          push: true
 
   dast-analysis:
     needs: build
