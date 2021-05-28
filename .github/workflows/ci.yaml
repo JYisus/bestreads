@@ -77,12 +77,12 @@ jobs:
     needs: build
     runs-on: ubuntu-20.04
     steps:
-      - name: Image Scanning
-        uses: hands-lab/dockle-action@v1
-        with:
-          image: ghcr.io/jyisus/bestreads-backend:latest
-          exit-code: '1'
-          exit-level: FATAL
+      # - name: Image Scanning
+      #   uses: hands-lab/dockle-action@v1
+      #   with:
+      #     image: ghcr.io/jyisus/bestreads-backend:latest
+      #     exit-code: '1'
+      #     exit-level: FATAL
       - name: Trivy Scanning
         run: docker run --rm -v "/var/run/docker.sock:/var/run/docker.sock" aquasec/trivy ghcr.io/jyisus/bestreads-backend:latest 
 
