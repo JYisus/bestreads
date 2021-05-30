@@ -32,14 +32,14 @@ export default class PostgreRepository implements Repository {
         password,
         hostname: host,
         port,
-        pathname: database,
+        pathname,
       } = new URL(databaseConnectionString);
       this.db = new Pool({
         user,
         password,
         host,
         port: Number(port),
-        database,
+        database: pathname.split('/')[1],
         max: 20,
         idleTimeoutMillis: 30000,
         connectionTimeoutMillis: 2000,
