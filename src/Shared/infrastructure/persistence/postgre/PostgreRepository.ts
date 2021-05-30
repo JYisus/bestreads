@@ -12,6 +12,7 @@ export default class PostgreRepository implements Repository {
   private client?: any;
 
   private readonly options = {
+    database: process.env.DATABASE || '',
     host: process.env.POSTGRES_HOST || 'localhost',
     port: Number(process.env.POSTGRES_PORT) || 5432,
     user: process.env.POSTGRES_USER || 'postgres',
