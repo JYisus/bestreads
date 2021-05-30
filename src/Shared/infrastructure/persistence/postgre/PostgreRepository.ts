@@ -20,6 +20,7 @@ export default class PostgreRepository implements Repository {
     max: 20,
     idleTimeoutMillis: 30000,
     connectionTimeoutMillis: 2000,
+    ...(process.env.DATABASE ? { ssl: true } : {}),
   };
 
   async connect(database: string) {
