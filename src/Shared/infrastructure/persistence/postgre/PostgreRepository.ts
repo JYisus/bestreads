@@ -1,4 +1,5 @@
 import Pool from 'pg-pool';
+import { URL } from 'url';
 import { Repository } from '../../../domain/Repository';
 
 interface Query {
@@ -24,7 +25,22 @@ export default class PostgreRepository implements Repository {
   };
 
   async connect(database: string) {
-    this.db = new Pool(this.options);
+    const databaseConnectionString = process.env.POSTGRES_URL;
+    if (databaseConnectionString) {
+      const url = new URL(databaseConnectionString);
+      this.db = new Pool({
+        user: url.username,
+        password: url.password,
+        host: url.hostname,
+        port: Number(url.port),
+        database: url.pathname,
+        max: 20,
+        idleTimeoutMillis: 30000,
+        connectionTimeoutMillis: 2000,
+      });
+    } else {
+      this.db = new Pool(this.options);
+    }
   }
 
   async insert(query: string): Promise<void> {
