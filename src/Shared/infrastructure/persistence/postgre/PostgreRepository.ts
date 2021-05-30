@@ -24,16 +24,22 @@ export default class PostgreRepository implements Repository {
     ...(process.env.DATABASE ? { ssl: true } : {}),
   };
 
-  async connect(database: string) {
+  async connect(database2: string) {
     const databaseConnectionString = process.env.POSTGRES_URL;
     if (databaseConnectionString) {
-      const url = new URL(databaseConnectionString);
+      const {
+        username: user,
+        password,
+        hostname: host,
+        port,
+        pathname: database,
+      } = new URL(databaseConnectionString);
       this.db = new Pool({
-        user: url.username,
-        password: url.password,
-        host: url.hostname,
-        port: Number(url.port),
-        database: url.pathname,
+        user,
+        password,
+        host,
+        port: Number(port),
+        database,
         max: 20,
         idleTimeoutMillis: 30000,
         connectionTimeoutMillis: 2000,
