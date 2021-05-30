@@ -25,7 +25,7 @@ export default class PostgreRepository implements Repository {
   };
 
   async connect(database2: string) {
-    const databaseConnectionString = process.env.POSTGRES_URL;
+    const databaseConnectionString = process.env.DATABASE_URL;
     if (databaseConnectionString) {
       const {
         username: user,
