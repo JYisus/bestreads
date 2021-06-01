@@ -3,9 +3,11 @@ import RepositoryBuilder from '../Shared/infrastructure/persistence/RepositoryBu
 import LoggerBuilder from '../Shared/infrastructure/logger/LoggerBuilder';
 
 const port = process.env.PORT || 3000;
+const database = process.env.DATABASE || '';
+
 const runService = async () => {
   const logger = LoggerBuilder.build();
-  const repository = await RepositoryBuilder.build('postgre', '');
+  const repository = await RepositoryBuilder.build('postgre', database);
   new BestReadsBackendApp(Number(port), repository, logger).start();
 };
 

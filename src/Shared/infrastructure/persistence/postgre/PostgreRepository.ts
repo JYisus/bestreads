@@ -1,4 +1,5 @@
 import Pool from 'pg-pool';
+import { URL } from 'url';
 import { Repository } from '../../../domain/Repository';
 
 interface Query {
@@ -12,6 +13,7 @@ export default class PostgreRepository implements Repository {
   private client?: any;
 
   private readonly options = {
+    database: process.env.DATABASE || '',
     host: process.env.POSTGRES_HOST || 'localhost',
     port: Number(process.env.POSTGRES_PORT) || 5432,
     user: process.env.POSTGRES_USER || 'postgres',
@@ -19,10 +21,32 @@ export default class PostgreRepository implements Repository {
     max: 20,
     idleTimeoutMillis: 30000,
     connectionTimeoutMillis: 2000,
+    ...(process.env.DATABASE ? { ssl: true } : {}),
   };
 
-  async connect(database: string) {
-    this.db = new Pool(this.options);
+  async connect(database2: string) {
+    const databaseConnectionString = process.env.DATABASE_URL;
+    if (databaseConnectionString) {
+      const {
+        username: user,
+        password,
+        hostname: host,
+        port,
+        pathname,
+      } = new URL(databaseConnectionString);
+      this.db = new Pool({
+        user,
+        password,
+        host,
+        port: Number(port),
+        database: pathname.split('/')[1],
+        max: 20,
+        idleTimeoutMillis: 30000,
+        connectionTimeoutMillis: 2000,
+      });
+    } else {
+      this.db = new Pool(this.options);
+    }
   }
 
   async insert(query: string): Promise<void> {

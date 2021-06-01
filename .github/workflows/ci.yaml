@@ -111,3 +111,15 @@ jobs:
           context: .
           tags: ghcr.io/jyisus/bestreads-backend:latest
           push: true
+
+  deploy-pre:
+    needs: push-image
+    runs-on: ubuntu-20.04
+    steps:
+    - uses: actions/checkout@v2
+    - uses: akhileshns/heroku-deploy@v3.12.12
+      with:
+        heroku_api_key: ${{ secrets.HEROKU_API_KEY }}
+        heroku_app_name: bestreads-tfm
+        heroku_email: ${{ secrets.HEROKU_EMAIL }}
+        usedocker: true
