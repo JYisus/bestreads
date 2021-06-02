@@ -93,7 +93,7 @@ jobs:
         uses: aquasecurity/trivy-action@master
         with:
           image-ref: ghcr.io/jyisus/bestreads-backend:latest
-          format: 'table'
+          format: table
           exit-code: '1'
           ignore-unfixed: true
           vuln-type: 'os,library'
