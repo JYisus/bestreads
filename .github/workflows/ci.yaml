@@ -24,14 +24,14 @@ jobs:
         publishToken: ${{ secrets.SEMGREP_APP_TOKEN }}
         publishDeployment: 1041
 
-    - name: Initialize CodeQL
-      uses: github/codeql-action/init@v1
-      with:
-        languages: 'javascript'
-    - name: Autobuild
-      uses: github/codeql-action/autobuild@v1
-    - name: Perform CodeQL Analysis
-      uses: github/codeql-action/analyze@v1
+    # - name: Initialize CodeQL
+    #   uses: github/codeql-action/init@v1
+    #   with:
+    #     languages: 'javascript'
+    # - name: Autobuild
+    #   uses: github/codeql-action/autobuild@v1
+    # - name: Perform CodeQL Analysis
+    #   uses: github/codeql-action/analyze@v1
 
   test:
     runs-on: ubuntu-20.04
