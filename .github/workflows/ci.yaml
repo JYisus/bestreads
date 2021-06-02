@@ -127,7 +127,7 @@ jobs:
   #         push: true
 
   deploy-pre:
-    needs: push-image
+    needs: dast-analysis
     runs-on: ubuntu-20.04
     steps:
     - uses: actions/checkout@v2
